@@ -14,8 +14,14 @@ pipeline {
     stage ('Building the application') {
         steps {
             echo "this is ${env.APPLICATION_NAME} application"
-            sh "mvn clean package"
+            sh "mvn clean package -DskipTests=True"
         }
     }
+    stage ('unit test cases')
+     steps {
+        echo "Performing Unit test cases for ${env.APPLICATION_NAME} application"
+        sh "mvn test"
+        
+     }
   }  
 }
