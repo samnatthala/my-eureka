@@ -4,7 +4,7 @@ pipeline {
     label 'k8s-slave'
   }
   environment {
-    APPLICATION_NAME = eureka
+    APPLICATION_NAME = "eureka"
   }
   stages {
     stage ('Building the application') {
