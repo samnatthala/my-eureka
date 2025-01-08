@@ -5,6 +5,9 @@ pipeline {
   }
   environment {
     APPLICATION_NAME = "eureka"
+    POM_VERSION = readMavenPom().getVersion()
+    POM_PACKAGING = readMavenPom().getPackging()
+
   }
   tools {
     maven  'Maven3.8.8'
@@ -29,7 +32,11 @@ pipeline {
 }
 
   }  
- 
+  stage ('Docker && Custom Format'){
+    //application name-version:
+    echo "actual format: ${env.APPLICATION_NAME}-${env.POM_VERSION}-${env.POM_PACKAGING}"
+
+  }
 }
 }
 
