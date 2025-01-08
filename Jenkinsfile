@@ -1,4 +1,4 @@
-## first app for eureka project
+
 pipeline {
   agent {
     label 'k8s-slave'
