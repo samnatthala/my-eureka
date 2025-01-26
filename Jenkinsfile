@@ -7,6 +7,7 @@ pipeline {
     APPLICATION_NAME = "eureka"
     POM_VERSION = readMavenPom().getVersion()
     POM_PACKAGING = readMavenPom().getPackaging()
+    DOCKER_HUB = "docker.io/dravikumar442277"
 
   }
   tools {
@@ -49,6 +50,8 @@ pipeline {
        ls -la ./.cicd
        cp ${workspace}/target/i27-${env.APPLICATION_NAME}-${env.POM_VERSION}.${env.POM_PACKAGING}  ./.cicd
        ls -la ./.cicd
+       echo ************docker build now working********
+       docker build -t --force-rm --no-cache --pull --rm=true ${env.DOCKER_HUB}/${nv.APPLICATION_NAME}:${GIT_COMMIT}  ./.cicd
 
        """
     }
