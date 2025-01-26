@@ -1,5 +1,5 @@
 # needs to create a dockerfile for java applicatinos
-FROM openjdk:11
+FROM openjdk:18.0.2.1-jdk
 ARG JAR_SOURCE
 ARG JAR_DEST
 ENV JAR_SOURCE  ${JAR_SOURCE}
