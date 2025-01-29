@@ -34,7 +34,7 @@ pipeline {
   }
 }  
     }
-      stage ('Sonar stage now') {
+    stage ('Sonar stage now') {
       steps {
         sh """
            echo " Now started sonar code quality coverage stage now"
@@ -46,17 +46,17 @@ pipeline {
       }
     }
   }  
-  stage ('Docker && Custom Format') {
-    steps {
+    stage ('Docker && Custom Format') {
+     steps {
 
-    //application name-version:
-    echo "actual format: ${env.APPLICATION_NAME}-${env.POM_VERSION}-${env.POM_PACKAGING}"
-    // custom names for app jar
-    // applicationname-buildnumber-branchnname-packaging
-    echo "custm app: ${env.APPLICATION_NAME}-${currentBuild.number}-${BRANCH_NAME}-${env.POM_PACKAGING}"
+       //application name-version:
+       echo "actual format: ${env.APPLICATION_NAME}-${env.POM_VERSION}-${env.POM_PACKAGING}"
+       // custom names for app jar
+       // applicationname-buildnumber-branchnname-packaging
+       echo "custm app: ${env.APPLICATION_NAME}-${currentBuild.number}-${BRANCH_NAME}-${env.POM_PACKAGING}"
    }
   }
-  stage ('Docker Build') {
+   stage ('Docker Build') {
     steps {
        sh """
        ls -la 
