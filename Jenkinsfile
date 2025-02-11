@@ -98,24 +98,21 @@ def dockerDeploy(envDeploy, hostPort, contPort) {
     return {
         echo "******************** Deploying to $envDeploy Environment ********************"
         stage ('Deploy to docker dev server') {
-            steps {
+            script {
                 withCredentials([usernamePassword(credentialsId: 'maha_creds_docker', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
                     // some block
-                    script {
-                        // sh "sshpass -p ${PASSWORD} -v ssh -o  StrictHostKeyChecking=no  ${USERNAME}@${docker_server_ip} hostname "
-                        sh "sshpass -p ${PASSWORD} -v ssh -o  StrictHostKeyChecking=no  ${USERNAME}@${docker_server_ip} docker pull  ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT} "
-                        try {
-                           echo "***********stopping the container *********************************************************"
+                    sh "sshpass -p ${PASSWORD} -v ssh -o  StrictHostKeyChecking=no  ${USERNAME}@${docker_server_ip} docker pull  ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
+                    try {
+                        echo "***********stopping the container *********************************************************"
                         sh "sshpass -p ${PASSWORD} -v ssh -o  StrictHostKeyChecking=no  ${USERNAME}@${docker_server_ip} docker stop  ${env.APPLICATION_NAME}-$envDeploy"
                         echo "**************** removing the container ****************************************************"
-                        sh "sshpass -p ${PASSWORD} -v ssh -o  StrictHostKeyChecking=no  ${USERNAME}@${docker_server_ip} docker rm  ${env.APPLICATION_NAME}-$envDeploy"  
-                        } catch (err) {
-                            echo "caught the error: $err"
-                        }
-                        echo "********************** creating the container ****************************************"
-                        sh "sshpass -p ${PASSWORD} -v ssh -o  StrictHostKeyChecking=no  ${USERNAME}@${docker_server_ip} docker run -d -p $hostPort:$contPort --name ${env.APPLICATION_NAME}-$envDeploy ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
+                        sh "sshpass -p ${PASSWORD} -v ssh -o  StrictHostKeyChecking=no  ${USERNAME}@${docker_server_ip} docker rm  ${env.APPLICATION_NAME}-$envDeploy"
+                    } catch (err) {
+                        echo "caught the error: $err"
                     }
-                } 
+                    echo "********************** creating the container ****************************************"
+                    sh "sshpass -p ${PASSWORD} -v ssh -o  StrictHostKeyChecking=no  ${USERNAME}@${docker_server_ip} docker run -d -p $hostPort:$contPort --name ${env.APPLICATION_NAME}-$envDeploy ${env.DOCKER_HUB}/${env.APPLICATION_NAME}:${GIT_COMMIT}"
+                }
             }
         }
     }
