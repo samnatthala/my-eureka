@@ -3,19 +3,11 @@ pipeline {
   agent {
     label 'k8s-slave'
   }
-  environment {
-    APPLICATION_NAME = "eureka"
-    POM_VERSION = readMavenPom().getVersion()
-    POM_PACKAGING = readMavenPom().getPackaging()
-    DOCKER_HUB = "docker.io/dravikumar442277"
-    DOCKER_CREDS = credentials('dravikumar442277_docker_creds')
-    SONAR_URL = "http://34.132.67.4:9000/"
-    SONAR_TOKENS = credentials('sonar_token')
-  }
   tools {
     maven  'Maven3.8.8'
     jdk 'java17'
   }
+  
   parameters {
     choice(name: 'sonarScans',
           choices: 'no\nyes',
@@ -46,6 +38,17 @@ pipeline {
             description: "This will Deploy my app to Prod env"
         )
   }
+  
+  environment {
+    APPLICATION_NAME = "eureka"
+    POM_VERSION = readMavenPom().getVersion()
+    POM_PACKAGING = readMavenPom().getPackaging()
+    DOCKER_HUB = "docker.io/dravikumar442277"
+    DOCKER_CREDS = credentials('dravikumar442277_docker_creds')
+    SONAR_URL = "http://34.132.67.4:9000/"
+    SONAR_TOKENS = credentials('sonar_token')
+  }
+
   stages {
     stage ('Building the application') { 
        when {
