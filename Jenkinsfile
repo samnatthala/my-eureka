@@ -9,21 +9,67 @@ pipeline {
     POM_PACKAGING = readMavenPom().getPackaging()
     DOCKER_HUB = "docker.io/dravikumar442277"
     DOCKER_CREDS = credentials('dravikumar442277_docker_creds')
-    SONAR_URL = "http://34.134.64.205:9000/"
+    SONAR_URL = "http://34.132.67.4:9000/"
     SONAR_TOKENS = credentials('sonar_token')
   }
   tools {
     maven  'Maven3.8.8'
     jdk 'java17'
   }
+  parameters {
+    choice(name: 'sonarScans',
+          choices: 'no\nyes',
+          description: 'This will scan the applicaiton using sonar'
+    )
+    choice(name:'buildOnly',
+          choices: 'no\nyes'
+           description: 'This will only build the application'
+    )
+    choice(name: 'dockerPush',
+            choices: 'no\nyes',
+            description: "This will trigger the build, docker build and docker push"
+        )
+    choice(name: 'deployToDev',
+            choices: 'no\nyes',
+            description: "This will Deploy my app to Dev env"
+        )
+    choice(name: 'deployToTest',
+            choices: 'no\nyes',
+            description: "This will Deploy my app to Test env"
+        )
+    choice(name: 'deployToStage',
+            choices: 'no\nyes',
+            description: "This will Deploy my app to Stage env"
+        )
+    choice(name: 'deployToProd',
+            choices: 'no\nyes',
+            description: "This will Deploy my app to Prod env"
+        )
+  }
   stages {
-    stage ('Building the application') {
+    stage ('Building the application') { 
+       when {
+        anyOf {
+            expression {
+               params.buildOnly == 'yes'
+               params.dockerPush == 'yes'
+            } 
+        }
+       }
         steps {
             echo "this is ${env.APPLICATION_NAME} application"
             sh "mvn clean package -DskipTests=True"
         } 
     }
     stage ('unit test cases') {
+      when {
+        anyOf {
+            expression {
+               params.buildOnly == 'yes'
+               params.dockerPush == 'yes'
+            } 
+        }
+       } 
      steps {
         echo "Performing Unit test cases for ${env.APPLICATION_NAME} application"
         sh "mvn test"  
@@ -35,7 +81,16 @@ pipeline {
      }  
     }
     stage ('Sonar stage now') {
-      steps {
+      when {
+          anyOf {
+                expression {
+                        params.sonarScans == 'yes'
+                        params.buildOnly == 'yes'
+                        params.dockerPush == 'yes'
+                    }
+                }
+            }
+       steps {
         sh """
            echo " Now started sonar code quality coverage stage now"
            mvn clean verify sonar:sonar \
@@ -55,6 +110,13 @@ pipeline {
       }
     }
     stage ('Docker Build') {
+     when {
+            anyOf {
+                    expression {
+                        params.dockerPush == 'yes'
+                    }
+                }
+      } 
       steps {
          sh """
          ls -la 
@@ -71,6 +133,13 @@ pipeline {
       }
     }
     stage ('Deploy to Dev') {
+     when {
+            anyOf {
+                    expression {
+                        params.deployToDev == 'yes'
+                    }
+                }
+          } 
       steps {
        script {
         dockerDeploy ('dev','5761','8761').call()
@@ -78,6 +147,13 @@ pipeline {
       }
     }
     stage ('Deploy to test') {
+      when {
+            anyOf {
+                  expression {
+                        params.deployToTest == 'yes'
+                    }
+                }
+        }
       steps {
        script {
         dockerDeploy ('test','6761','8761').call()
@@ -85,6 +161,13 @@ pipeline {
       }
     }
     stage ('Deploy to prod') {
+          when {
+                anyOf {
+                    expression {
+                        params.deployToProd == 'yes'
+                    }
+                }
+            }
       steps {
        script {
         dockerDeploy ('prod','7761','8761').call()
