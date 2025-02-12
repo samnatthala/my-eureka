@@ -22,7 +22,7 @@ pipeline {
           description: 'This will scan the applicaiton using sonar'
     )
     choice(name:'buildOnly',
-          choices: 'no\nyes'
+          choices: 'no\nyes',
           description: 'This will only build the application'
     )
     choice(name: 'dockerPush',
