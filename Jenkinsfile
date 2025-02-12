@@ -38,7 +38,7 @@ pipeline {
             description: "This will Deploy my app to Prod env"
         )
   }
-  
+
   environment {
     APPLICATION_NAME = "eureka"
     POM_VERSION = readMavenPom().getVersion()
@@ -103,7 +103,7 @@ pipeline {
         """
       }
     }
-    stage ('Docker && Custom Format') {
+    /*stage ('Docker && Custom Format') {
      steps {
        //application name-version:
        echo "actual format: ${env.APPLICATION_NAME}-${env.POM_VERSION}-${env.POM_PACKAGING}"
@@ -111,7 +111,7 @@ pipeline {
        // applicationname-buildnumber-branchnname-packaging
        echo "custm app: ${env.APPLICATION_NAME}-${currentBuild.number}-${BRANCH_NAME}-${env.POM_PACKAGING}"
       }
-    }
+    } */
     stage ('Docker Build') {
      when {
             anyOf {
