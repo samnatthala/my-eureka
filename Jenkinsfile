@@ -4,8 +4,8 @@ pipeline {
         label 'maven-slave'
     } 
     tools {
-        maven 'Maven-3.8.8'
-        jdk 'JDK-17'
+        maven 'Maven3.8.8'
+        jdk 'java17'
     }
     parameters {
         choice(name: 'sonarScans',
