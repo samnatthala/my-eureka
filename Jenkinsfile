@@ -4,11 +4,7 @@ pipeline {
         label 'maven-slave'
     } 
     tools {
-<<<<<<< HEAD
-        maven 'Maven3.8.8'
-=======
-        maven 'Maven-3.8.8'
->>>>>>> a825cffb20744a89580173a71be3ff749b0e658c
+        maven 'Maven3.8.8' 
         jdk 'java17'
     }
     parameters {
