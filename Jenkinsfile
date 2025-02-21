@@ -182,8 +182,8 @@ pipeline {
 // Define the dockerDeploy method outside the pipeline block
 def dockerDeploy(envDeploy, hostPort, contPort) {
     return {
-            echo "******************** Deploying to $envDeploy Environment ********************"
-            withCredentials([usernamePassword(credentialsId: 'maha_docker_vm_creds', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                 echo "*****************Deploying to Test Environment here########################"
+                withCredentials([usernamePassword(credentialsId: 'maha_creds_docker', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
         
             script {
                     // some block
