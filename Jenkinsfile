@@ -198,7 +198,8 @@ def dockerDeploy(envDeploy, hostPort, contPort) {
                     }
                     echo "********************** creating the container ****************************************"
                  // Run the container
-                sh "sshpass -p '$PASSWORD' -v ssh -o StrictHostKeyChecking=no $USERNAME@$docker_server_ip \"docker run --restart always --name ${env.APPLICATION_NAME}-$envDeploy -p $hostPort:$contPort -d ${env.DOCKER_HUB}/${env.DOCKER_REPO}:$GIT_COMMIT\"
+                sh "sshpass -p '${PASSWORD}' -v ssh -o StrictHostKeyChecking=no ${USERNAME}@${docker_server_ip} \"docker run --restart always --name ${env.APPLICATION_NAME}-${envDeploy} -p ${hostPort}:${contPort} -d ${env.DOCKER_HUB}/${env.DOCKER_REPO}:${GIT_COMMIT}\""
+
                 }
             }
        
