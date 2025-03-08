@@ -28,7 +28,8 @@ RUN chmod 777 /opt/i27/
 EXPOSE 8761
 
 # Define the command to run the application
-CMD ["java", "-jar", "/opt/i27/${APPLICATION_NAME}.jar"]
+#CMD ["java", "-jar", "/opt/i27/${APPLICATION_NAME}.jar"]
+CMD java -jar /opt/i27/${APPLICATION_NAME}.jar
 
 
 
