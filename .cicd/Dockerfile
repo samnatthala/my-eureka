@@ -1,17 +1,51 @@
-# needs to create a dockerfile for java applicatinos
+# testing dockerfile new way
+# Use OpenJDK 18 base image
 FROM openjdk:18.0.2.1-jdk
+
+# Define build-time arguments
 ARG JAR_SOURCE
 ARG JAR_DEST
-ENV JAR_SOURCE  ${JAR_SOURCE}
-ENV JAR_DEST ${JAR_DEST}
-RUN mkdir -p /opt/i27/
-WORKDIR /opt/i27/
 ARG APPLICATION_NAME
-APPLICATION_NAME = "${pipelineparams.appName}"
-COPY ["${JAR_SOURCE}", "/opt/i27/i27cart-${env.APPLICATION_NAM}.jar"]
+
+# Set environment variables based on the arguments
+ENV JAR_SOURCE=${JAR_SOURCE}
+ENV JAR_DEST=${JAR_DEST}
+ENV APPLICATION_NAME=${APPLICATION_NAME}
+
+# Create the target directory
+RUN mkdir -p /opt/i27/
+
+# Set the working directory
+WORKDIR /opt/i27/
+
+# Copy the JAR file from the build context into the container
+COPY ${JAR_SOURCE} /opt/i27/${APPLICATION_NAME}.jar
+
+# Set file permissions
 RUN chmod 777 /opt/i27/
+
+# Expose the application port (change if needed)
 EXPOSE 8761
-CMD ["java", "-jar", "/opt/i27/i27cart-${env.APPLICATION_NAM}.jar"]
+
+# Define the command to run the application
+CMD ["java", "-jar", "/opt/i27/${APPLICATION_NAME}.jar"]
+
+
+
+# needs to create a dockerfile for java applicatinos
+#FROM openjdk:18.0.2.1-jdk
+#ARG JAR_SOURCE
+#ARG JAR_DEST
+#ENV JAR_SOURCE  ${JAR_SOURCE}
+#ENV JAR_DEST ${JAR_DEST}
+#RUN mkdir -p /opt/i27/
+#WORKDIR /opt/i27/
+#ARG APPLICATION_NAME
+#APPLICATION_NAME = "${pipelineparams.appName}"
+#COPY ["${JAR_SOURCE}", "/opt/i27/i27cart-${env.APPLICATION_NAM}.jar"]
+#RUN chmod 777 /opt/i27/
+#EXPOSE 8761
+#CMD ["java", "-jar", "/opt/i27/i27cart-${env.APPLICATION_NAM}.jar"]
 
 # ----adding new docker configuration ****************
 #FROM openjdk:11 AS app
