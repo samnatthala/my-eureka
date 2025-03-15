@@ -1,9 +1,18 @@
 name: i27-eureka
 fullname: i27-eureka-dev
 replicas:
-  default: 1
-image: 
-  name: i27devopsb4.jfrog.io/cont-images-docker-docker/eureka
-  tag: radom
-targetPort: 8761
+ default: 1
+image:
+ name: docker.io/dravikumar442277/eureka
+ tag: dev
+targetport: 8761
+
+#name: i27-eureka
+#fullname: i27-eureka-dev
+#replicas:
+#  default: 1
+#image: 
+#  name: i27devopsb4.jfrog.io/cont-images-docker-docker/eureka
+#  tag: radom
+#targetPort: 8761
 
