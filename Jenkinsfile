@@ -11,9 +11,11 @@ pipeline {
     }
     stages{
         stage ('Build'){
+            steps{
         echo "we are building the ${env.APPLICATION_NAME} application..."    
         sh "mvn clean package"
 
         }
     }
+}
 }
