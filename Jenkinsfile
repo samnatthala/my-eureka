@@ -10,7 +10,7 @@ pipeline {
         jdk 'jdk-17'
     }
     stages{
-        stage ('Build '){
+        stage ('Build'){
         echo "we are building the ${env.APPLICATION_NAME} application..."    
         sh "mvn clean package"
 
